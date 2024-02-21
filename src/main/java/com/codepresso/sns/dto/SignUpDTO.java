@@ -6,4 +6,5 @@ import java.util.Date;
 
 public record SignUpDTO(@NotBlank String userName, @Email String email , @NotBlank String password, String introduction, String occupation, Date birthday, String city) {
 
+
 }

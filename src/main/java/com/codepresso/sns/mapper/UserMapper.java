@@ -13,11 +13,11 @@ public interface UserMapper {
     @Options(useGeneratedKeys = true, keyProperty = "userId")
     int insert(User user);
 
-    @Select("SELECT *  FROM user WHERE email = #{email}")
+    @Select("SELECT * FROM user WHERE email = #{email}")
     User findByEmail(String email);
 
-    @Select("SELECT * FROM user WHERE id = #{id}")
-    User findById(long id);
+    @Select("SELECT * FROM user WHERE userId = #{userId}")
+    User findById(long userId);
 
 
 }

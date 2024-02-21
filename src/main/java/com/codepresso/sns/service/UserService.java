@@ -31,7 +31,9 @@ public class UserService {
                 .map(User::getUserId)
                 .orElse(0L);
     }
-    //public User getUserById(long userID){
-    //    return userMapper.findById(userID);
-    //}
+    public Optional<UserDTO> getUserById(long userId) {
+        return Optional.ofNullable(userMapper.findById(userId)).map(User::toDTO);
+    }
+
+
 }

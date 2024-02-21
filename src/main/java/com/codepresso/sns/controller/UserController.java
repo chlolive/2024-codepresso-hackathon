@@ -7,10 +7,7 @@ import com.codepresso.sns.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseCookie;
 
 import java.net.URI;
@@ -28,17 +25,16 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> signUp(@Valid @RequestBody SignUpDTO signUpDTO) {
         long userId = userService.signUp(signUpDTO);
-        return ResponseEntity.created(URI.create("/user/" + userId + "/profile")).build();
+        return userService.getUserById(userId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     //2.로그인
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> signIn(@Valid @RequestBody SignInDTO signInDTO) {
+    public @ResponseBody ResponseEntity<UserDTO> signIn(@Valid @RequestBody SignInDTO signInDTO) {
         long userId = userService.signIn(signInDTO);
         if (userId == 0) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(404).build();
         }
-        //UserDTO userDTO =
         return ResponseEntity.ok().header(SET_COOKIE,
                 generateUidCookie(userId).toString()).build();
     }
@@ -49,7 +45,11 @@ public class UserController {
     }
 
     //3.회원정보 간단조회
-
+    @GetMapping("/{userId}/summary")
+    public ResponseEntity<UserDTO> search(@PathVariable long userId) {
+        return userService.getUserById(userId).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
 
 }
