@@ -1,15 +1,13 @@
 package com.codepresso.sns.vo;
 
-import com.codepresso.sns.dto.SignUpDTO;
-import com.codepresso.sns.dto.UserDTO;
+import com.codepresso.sns.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -24,12 +22,12 @@ public class User {
     long followerCount;
     String introduction;
     String occupation;
-    Date birthday;
+    LocalDate birthday;
     String city;
     Timestamp createdAt;
     Timestamp updatedAt;
 
-    public User(String userName, String email, String password, String introduction, String occupation, Date birthday, String city) {
+    public User(String userName, String email, String password, String introduction, String occupation, LocalDate birthday, String city) {
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -46,6 +44,11 @@ public class User {
 
     public UserDTO toDTO() {
         return new UserDTO(userId, userName, email, introduction, occupation, birthday, city);
+    }
+
+    public DetailDTO toDetailDTO() {return new DetailDTO(userId, userName, email, postCount,followingCount,followerCount, introduction, occupation, birthday, city, createdAt, updatedAt);}
+    public SignInDTO toSignInDTO() {
+        return new SignInDTO(userId,userName,  email, password);
     }
 
 
