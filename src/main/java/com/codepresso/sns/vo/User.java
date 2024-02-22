@@ -1,6 +1,8 @@
 package com.codepresso.sns.vo;
 
-import com.codepresso.sns.dto.*;
+import com.codepresso.sns.dto.user.DetailDTO;
+import com.codepresso.sns.dto.user.SignInDTO;
+import com.codepresso.sns.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

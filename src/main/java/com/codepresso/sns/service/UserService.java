@@ -1,17 +1,14 @@
 package com.codepresso.sns.service;
 
-import com.codepresso.sns.dto.*;
+import com.codepresso.sns.dto.user.*;
 import com.codepresso.sns.mapper.UserMapper;
 import com.codepresso.sns.vo.Summary;
 import com.codepresso.sns.vo.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

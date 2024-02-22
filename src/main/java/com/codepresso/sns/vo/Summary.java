@@ -1,6 +1,6 @@
 package com.codepresso.sns.vo;
 
-import com.codepresso.sns.dto.SummaryDTO;
+import com.codepresso.sns.dto.user.SummaryDTO;
 
 public class Summary {
 

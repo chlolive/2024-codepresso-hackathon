@@ -1,4 +1,4 @@
-package com.codepresso.sns.dto;
+package com.codepresso.sns.dto.user;
 
 import java.util.Date;
 

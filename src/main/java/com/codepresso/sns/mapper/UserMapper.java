@@ -1,6 +1,5 @@
 package com.codepresso.sns.mapper;
 
-import com.codepresso.sns.dto.UserDTO;
 import com.codepresso.sns.vo.Summary;
 import com.codepresso.sns.vo.User;
 import org.apache.ibatis.annotations.Insert;
@@ -8,9 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.*;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 @Mapper
 public interface UserMapper {

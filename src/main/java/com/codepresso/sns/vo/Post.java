@@ -1,11 +1,11 @@
 package com.codepresso.sns.vo;
 
 
-import com.codepresso.sns.dto.PostDTO;
+import com.codepresso.sns.dto.post.PostDTO;
+import com.codepresso.sns.dto.post.PostViewAll;
 import lombok.Data;
 import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,14 +18,15 @@ public class Post {
     long commentCount;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
-    public Post(long postId, long userId, String content) {
-        this.postId = postId;
+    public Post(long userId, String content) {
         this.userId = userId;
         this.content = content;
+        this.likeCount = 0;
+        this.commentCount = 0;
         this.createdAt =  LocalDateTime.now();
         this.updatedAt =  LocalDateTime.now();
     }
     public PostDTO toDTO() {
-        return new PostDTO(postId, userId, content);
+        return new PostDTO(postId, userId, content, likeCount, commentCount);
     }
 }

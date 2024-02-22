@@ -1,24 +1,17 @@
 package com.codepresso.sns.controller;
 
-import com.codepresso.sns.dto.*;
+import com.codepresso.sns.dto.user.*;
 import com.codepresso.sns.service.UserService;
 import com.codepresso.sns.vo.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMessage;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.net.URI;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @RequestMapping("/user")
 @RestController
