@@ -39,6 +39,7 @@ public class UserController {
             }
             else if (signUpDTO.email()!=null){
                 return ResponseEntity.status(409).build();
+
             }
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(newUserDTO);
