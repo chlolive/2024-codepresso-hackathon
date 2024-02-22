@@ -1,4 +1,4 @@
-package com.codepresso.sns.vo;
+package com.codepresso.sns.vo.user;
 
 import com.codepresso.sns.dto.user.SummaryDTO;
 

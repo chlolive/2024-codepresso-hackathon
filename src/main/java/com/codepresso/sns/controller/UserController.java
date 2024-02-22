@@ -1,16 +1,20 @@
 package com.codepresso.sns.controller;
 
 import com.codepresso.sns.dto.user.*;
+import com.codepresso.sns.mapper.UserMapper;
 import com.codepresso.sns.service.UserService;
-import com.codepresso.sns.vo.User;
+import com.codepresso.sns.vo.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseCookie;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @RequestMapping("/user")
@@ -19,12 +23,25 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     //1. 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signUp(@Valid @RequestBody SignUpDTO signUpDTO) {
-        long userId = userService.signUpUser(signUpDTO);
-        return userService.getUserById(userId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<UserDTO>> signUp(@RequestBody SignUpDTO signUpDTO) {
+        Optional<UserDTO> newUserDTO = userService.signUpUser(signUpDTO);
+
+//        if(userMapper.checkEmail(signUpDTO.email()).isPresent()){
+//            return ResponseEntity.status(409).build();
+//        }
+        if(newUserDTO.isEmpty()){
+            if(signUpDTO.userName()==null|| signUpDTO.email()==null || signUpDTO.introduction()==null || signUpDTO.occupation()==null || signUpDTO.birthday()==null || signUpDTO.city()==null){
+                return ResponseEntity.status(400).build();
+            }
+            else if (signUpDTO.email()!=null){
+                return ResponseEntity.status(409).build();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUserDTO);
     }
 
     //2.로그인
@@ -82,7 +99,7 @@ public class UserController {
         if(userService.checkPW(passwordDTO.currentPassword(), currentPW )) {
 
             userService.patchPW(userId, newPW, updatedAt);
-            return ResponseEntity.badRequest().body("Password successfully updated.");
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Password successfully updated."));
         } else {
             return ResponseEntity.status(400).build();
         }

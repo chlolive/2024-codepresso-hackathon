@@ -3,6 +3,7 @@ package com.codepresso.sns.dto.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.ALWAYS)
@@ -10,13 +11,13 @@ import java.time.LocalDateTime;
 public class PostByUser {
     private long postId;
     private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public PostByUser(long postId, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.postId = postId;
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+        this.updatedAt = this.createdAt;
     }
 }

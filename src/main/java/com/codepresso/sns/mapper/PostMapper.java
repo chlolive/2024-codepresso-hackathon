@@ -2,10 +2,10 @@ package com.codepresso.sns.mapper;
 
 import com.codepresso.sns.dto.post.PostByUser;
 import com.codepresso.sns.dto.post.PostViewAll;
+import com.codepresso.sns.dto.post.PostWithLike;
 import com.codepresso.sns.vo.Post;
 import org.apache.ibatis.annotations.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -34,10 +34,16 @@ public interface PostMapper {
             " ORDER BY post.postId DESC")
     List<PostViewAll> findAll();
 
+    @Select("SELECT post.postId, post.userId, user.userName, post.content, post.createdAt, post.likeCount " +
+            "FROM post " +
+            "JOIN user ON post.userId = user.userId " +
+            "ORDER BY post.likeCount DESC")
+    List<PostWithLike> findAllwithLike();
 
-    @Update("UPDATE post SET content = #{content}, updatedAt=#{updatedAt} WHERE postId = #{postId} AND userId = #{userId}")
-    int editPost(long postId, long userId, String content, Timestamp updatedAt);
-
+    @Update("UPDATE post SET content = #{content} WHERE postId = #{postId} AND userId = #{userId}")
+    int editPost(long postId, long userId, String content);
+    @Update("UPDATE post SET likeCount = #{likeCount} WHERE postId = #{postId} AND userId = #{userId}")
+    int updateLike(long postId, long userId, long likeCount);
     @Delete("DELETE FROM post WHERE postId = #{postId} AND userID = #{userId}")
     int deletePost(long postId, long userId);
 

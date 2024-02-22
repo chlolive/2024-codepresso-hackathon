@@ -22,18 +22,28 @@ public class PostController {
     @PostMapping("/post")
     public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postDTO){
         long postId = postService.createPost(postDTO);
+        if(postId < 0){
+            return ResponseEntity.status(404).build();
+        }
         return postService.getPostById(postId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 
     }
     //2. 전체 Post 조회
     @GetMapping("/posts")
     public ResponseEntity<Map<String, List<PostViewAll>>> getAllPosts() {
-        return ResponseEntity.ok().body(postService.getAllPosts());
+        Map<String, List<PostViewAll>> responseBody = new HashMap<>();
+        List<PostViewAll> postList = postService.getAllPosts();
+        responseBody.put("posts", postList);
+        return ResponseEntity.ok().body(responseBody);
     }
 
     //4. 작성자 별 Post 조회
     @GetMapping("/user/{userId}/posts")
     public ResponseEntity<Map<String, Object>> getPostsByUserId(@PathVariable long userId){
+        String userName = postService.getUserName(userId);
+        if(userName == null){
+            return ResponseEntity.status(404).build();
+        }
         return ResponseEntity.ok().body(postService.getPostsByUserId(userId));
 
     }

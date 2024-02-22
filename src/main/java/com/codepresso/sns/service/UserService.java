@@ -2,8 +2,9 @@ package com.codepresso.sns.service;
 
 import com.codepresso.sns.dto.user.*;
 import com.codepresso.sns.mapper.UserMapper;
-import com.codepresso.sns.vo.Summary;
-import com.codepresso.sns.vo.User;
+import com.codepresso.sns.vo.comment.Comment;
+import com.codepresso.sns.vo.user.Summary;
+import com.codepresso.sns.vo.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,13 +19,28 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    public long signUpUser(SignUpDTO signUpDTO) {
+
+    public Optional<UserDTO> signUpUser(SignUpDTO signUpDTO) {
+
+        if(signUpDTO.userName() == null || signUpDTO.email()==null||signUpDTO.password()==null){
+            return Optional.empty();
+        }
+
+        if(userMapper.checkEmail(signUpDTO.email()).isPresent()){
+            return Optional.empty();
+        }
+
         User newUser = new User(signUpDTO.userName(), signUpDTO.email(),
                 passwordEncoder.encode(signUpDTO.password()), signUpDTO.introduction(),
                 signUpDTO.occupation(), signUpDTO.birthday(), signUpDTO.city());
         newUser.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        userMapper.insert(newUser);
-        return newUser.getUserId();
+
+        int result = userMapper.insert(newUser);
+        long userId = newUser.getUserId();
+        if (result==1) {
+            return Optional.ofNullable(userMapper.findById(userId)).map(User::toDTO);
+        }
+        return Optional.empty();
 
     }
 

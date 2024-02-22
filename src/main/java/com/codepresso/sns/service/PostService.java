@@ -5,6 +5,7 @@ import com.codepresso.sns.dto.post.PostDTO;
 
 import com.codepresso.sns.dto.user.UserDTO;
 import com.codepresso.sns.dto.post.PostViewAll;
+import com.codepresso.sns.dto.post.PostWithLike;
 import com.codepresso.sns.mapper.PostMapper;
 import com.codepresso.sns.vo.Post;
 
@@ -13,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -25,6 +24,10 @@ public class PostService {
 
     public long createPost(PostDTO postDTO) {
         Post post = new Post(postDTO.userId(), postDTO.content());
+        Optional<UserDTO> userDTO = userService.getUserById(postDTO.userId());
+        if(userDTO.isEmpty()){
+            return -1;
+        }
         postMapper.create(post);
         return post.getPostId();
     }
@@ -36,20 +39,24 @@ public class PostService {
         return postMapper.findEditedPost(postId);
     }
     public long editPost(long postId, long userId, String content){
-        Timestamp updatedAt = Timestamp.valueOf(LocalDateTime.now());
-        return postMapper.editPost(postId, userId, content, updatedAt);
-
+        return postMapper.editPost(postId, userId, content);
+    }
+    public long updateLike(long postId, long userId, long offset){
+        PostDTO postDTO= postMapper.findById(postId).toDTO();
+        return postMapper.updateLike(postId, userId, postDTO.likeCount()+offset);
     }
     public long deletePost(long postId, long userId){
         return postMapper.deletePost(postId, userId);
     }
 
-    public Map<String, List<PostViewAll>> getAllPosts() {
-        List<PostViewAll> postList = postMapper.findAll();
-        Map<String, List<PostViewAll>> responseBody = new HashMap<>();
-        responseBody.put("posts", postList);
-        return responseBody;
+    public List<PostViewAll> getAllPosts() {
+        return postMapper.findAll();
     }
+
+    public List<PostWithLike> getAllPostsOrderByLike(){
+        return postMapper.findAllwithLike();
+    }
+
     public Map<String, Object> getPostsByUserId(long userId){
         List<PostByUser> postList = postMapper.findByUserId(userId);
         Map<String, Object> responseBody = new LinkedHashMap<>();
