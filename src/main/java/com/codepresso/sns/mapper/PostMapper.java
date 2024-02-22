@@ -5,6 +5,7 @@ import com.codepresso.sns.dto.post.PostViewAll;
 import com.codepresso.sns.vo.Post;
 import org.apache.ibatis.annotations.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -34,8 +35,8 @@ public interface PostMapper {
     List<PostViewAll> findAll();
 
 
-    @Update("UPDATE post SET content = #{content} WHERE postId = #{postId} AND userId = #{userId}")
-    int editPost(long postId, long userId, String content);
+    @Update("UPDATE post SET content = #{content}, updatedAt=#{updatedAt} WHERE postId = #{postId} AND userId = #{userId}")
+    int editPost(long postId, long userId, String content, Timestamp updatedAt);
 
     @Delete("DELETE FROM post WHERE postId = #{postId} AND userID = #{userId}")
     int deletePost(long postId, long userId);

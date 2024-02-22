@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -34,7 +36,8 @@ public class PostService {
         return postMapper.findEditedPost(postId);
     }
     public long editPost(long postId, long userId, String content){
-        return postMapper.editPost(postId, userId, content);
+        Timestamp updatedAt = Timestamp.valueOf(LocalDateTime.now());
+        return postMapper.editPost(postId, userId, content, updatedAt);
 
     }
     public long deletePost(long postId, long userId){
